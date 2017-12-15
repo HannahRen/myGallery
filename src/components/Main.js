@@ -66,6 +66,31 @@ var ImgFigure = React.createClass({
   }
 });
 
+var Controller = React.createClass({
+  handleClick(e){
+    e.preventDefault();
+    e.stopPropagation();
+
+    if(this.props.arrange.isCenter){
+      this.props.inverse();
+    } else {
+      this.props.center();
+    }
+  },
+  render(){
+    var controllerClassName = 'controller-unit';
+    if(this.props.arrange.isCenter){
+      controllerClassName += ' is-center';
+      if(this.props.arrange.isInverse) {
+        controllerClassName += ' is-inverse';
+      }
+    }
+    return(
+      <span className={controllerClassName} onClick={this.handleClick}></span>
+    );
+  }
+});
+
 class AppComponent extends React.Component {
 
   rearrange(centerIndex) {
@@ -221,6 +246,8 @@ class AppComponent extends React.Component {
       }
       imgFigures.push(<ImgFigure data={value} key={index} ref={'imgFigure' + index} arrange={this.state.imgsArrangeArr[index]}
                       inverse={this.inverse(index)} center={this.center(index)}/>);
+      controllerUnits.push(<Controller key={index} arrange={this.state.imgsArrangeArr[index]}
+                      inverse={this.inverse(index)} center={this.center(index)} />)
     }.bind(this));
     return (
       <section className="stage" ref="stage">
